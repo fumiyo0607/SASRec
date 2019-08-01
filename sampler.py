@@ -38,7 +38,7 @@ def sample_function(user_train, usernum, itemnum, batch_size, maxlen, result_que
         for i in range(batch_size):
             one_batch.append(sample())
 
-        result_queue.put(zip(*one_batch))
+        result_queue.put(list(zip(*one_batch)))
 
 
 class WarpSampler(object):
