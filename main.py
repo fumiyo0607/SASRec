@@ -27,7 +27,40 @@ parser.add_argument('--num_heads', default=1, type=int)
 parser.add_argument('--dropout_rate', default=0.5, type=float)
 parser.add_argument('--l2_emb', default=0.0, type=float)
 
-args = parser.parse_args()
+# args = parser.parse_args()
+
+dataset = 'Beauty'
+train_dir = 'train'
+batch_size = '128'
+lr = '0.001'
+maxlen = '50'
+hidden_units = '50'
+num_blocks = '2'
+num_epochs = '201'
+num_heads = '1'
+dropout_rate = '0.5'
+l2_emb = '0.0'
+
+def get_args():
+    args = parser.parse_args( args = [
+                                        '--dataset',      dataset,
+                                        '--train_dir',    train_dir,
+                                        '--batch_size',   batch_size,
+                                        '--lr',           lr,
+                                        '--maxlen',       maxlen,
+                                        '--hidden_units', hidden_units,
+                                        '--num_blocks',   num_blocks,
+                                        '--num_epochs',   num_epochs,
+                                        '--num_heads',    num_heads,
+                                        '--dropout_rate', dropout_rate,
+                                        '--l2_emb',       l2_emb
+                                    ]
+                            )
+    return args
+
+args = get_args()
+
+
 if not os.path.isdir(args.dataset + '_' + args.train_dir):
     os.makedirs(args.dataset + '_' + args.train_dir)
 with open(os.path.join(args.dataset + '_' + args.train_dir, 'args.txt'), 'w') as f:
@@ -36,7 +69,7 @@ f.close()
 
 dataset = data_partition(args.dataset)
 [user_train, user_valid, user_test, usernum, itemnum] = dataset
-num_batch = len(user_train) / args.batch_size
+num_batch = int(len(user_train) / args.batch_size)
 cc = 0.0
 for u in user_train:
     cc += len(user_train[u])
