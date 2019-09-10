@@ -56,7 +56,7 @@ def creat_fixed_data(dataset, minlen):
         }
     )
 
-    fixed_df.to_csv("../data/{}_min_{}.txt".format(dataset, minlen), header=None, sep=' ')
+    fixed_df.to_csv("../data/{}_min_{}.txt".format(dataset, minlen), header=None,index=False, sep=' ')
 
     print('user_num:{}'.format(len(User)))
     print('fied {} created ... ! '.format(dataset))
