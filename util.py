@@ -73,6 +73,8 @@ def evaluate(model, dataset, args, sess):
 
         # attention_score is maxlen(n) × maxlen(n) matrics 
         # type : numpy.ndarray
+        # TODO:　attention_score を.np に出力する仕様に変更する
+        
         attention_score = model.fetch_attention_score(sess, [u], [seq], item_idx)
         attention_score = attention_score[0]
 
