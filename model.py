@@ -51,7 +51,7 @@ class Model():
                 with tf.variable_scope("num_blocks_%d" % i):
 
                     # Self-attention
-                    self.seq = multihead_attention(queries=normalize(self.seq),
+                    self.seq, self.attention_score = multihead_attention(queries=normalize(self.seq),
                                                    keys=self.seq,
                                                    num_units=args.hidden_units,
                                                    num_heads=args.num_heads,
@@ -109,4 +109,8 @@ class Model():
 
     def predict(self, sess, u, seq, item_idx):
         return sess.run(self.test_logits,
+                        {self.u: u, self.input_seq: seq, self.test_item: item_idx, self.is_training: False})
+
+    def fetch_attention_score(self, sess, u, seq, item_idx):
+        return sess.run(self.attention_score,
                         {self.u: u, self.input_seq: seq, self.test_item: item_idx, self.is_training: False})

@@ -199,7 +199,9 @@ def multihead_attention(queries,
             outputs = tf.where(tf.equal(masks, 0), paddings, outputs) # (h*N, T_q, T_k)
   
         # Activation
+        # これが AttentionScore
         outputs = tf.nn.softmax(outputs) # (h*N, T_q, T_k)
+        attention_score = outputs
          
         # Query Masking
         query_masks = tf.sign(tf.abs(tf.reduce_sum(queries, axis=-1))) # (N, T_q)
@@ -223,7 +225,7 @@ def multihead_attention(queries,
         #outputs = normalize(outputs) # (N, T_q, C)
  
     if with_qk: return Q,K
-    else: return outputs
+    else: return outputs, attention_score
 
 def feedforward(inputs, 
                 num_units=[2048, 512],

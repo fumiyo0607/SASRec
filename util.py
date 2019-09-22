@@ -71,6 +71,11 @@ def evaluate(model, dataset, args, sess):
         predictions = -model.predict(sess, [u], [seq], item_idx)
         predictions = predictions[0]
 
+        # attention_score is maxlen(n) × maxlen(n) matrics 
+        # type : numpy.ndarray
+        attention_score = model.fetch_attention_score(sess, [u], [seq], item_idx)
+        attention_score = attention_score[0]
+
         rank = predictions.argsort().argsort()[0]
 
         valid_user += 1
