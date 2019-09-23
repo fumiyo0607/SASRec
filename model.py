@@ -1,4 +1,5 @@
 from modules import *
+from collections import defaultdict
 
 
 class Model():
@@ -47,11 +48,13 @@ class Model():
 
             # Build blocks
 
+            self.attention_score = defaultdict(list)
+
             for i in range(args.num_blocks):
                 with tf.variable_scope("num_blocks_%d" % i):
 
                     # Self-attention
-                    self.seq, self.attention_score = multihead_attention(queries=normalize(self.seq),
+                    self.seq, attention_score = multihead_attention(queries=normalize(self.seq),
                                                    keys=self.seq,
                                                    num_units=args.hidden_units,
                                                    num_heads=args.num_heads,
@@ -59,6 +62,8 @@ class Model():
                                                    is_training=self.is_training,
                                                    causality=True,
                                                    scope="self_attention")
+
+                    self.attention_score[i] = attention_score
 
                     # Feed forward
                     self.seq = feedforward(normalize(self.seq), num_units=[args.hidden_units, args.hidden_units],

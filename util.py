@@ -82,7 +82,7 @@ def evaluate(model, dataset, args, sess):
         # TODO:　attention_score を.np に出力する仕様に変更する
 
         attention_score = model.fetch_attention_score(sess, [u], [seq], item_idx)
-        attention_score = attention_score[0]
+        # attention_score = attention_score[0]
 
         rank = predictions.argsort().argsort()[0]
 
