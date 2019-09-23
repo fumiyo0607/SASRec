@@ -44,6 +44,12 @@ def evaluate(model, dataset, args, sess):
     HT = 0.0
     valid_user = 0.0
 
+    success_user_attention_heat_map = defaultdict(list)
+    error_user_attention_heat_map   = defaultdict(list)
+
+    # success_users_attention_score = np.empty((0,args.maxlen, args.maxlen), dtype=np.int32)
+    # error_users_attention_score   = np.empty((0,args.maxlen, args.maxlen), dtype=np.int32)
+
     if usernum>10000:
         users = random.sample(range(1, usernum + 1), 10000)
     else:
@@ -74,7 +80,7 @@ def evaluate(model, dataset, args, sess):
         # attention_score is maxlen(n) × maxlen(n) matrics 
         # type : numpy.ndarray
         # TODO:　attention_score を.np に出力する仕様に変更する
-        
+
         attention_score = model.fetch_attention_score(sess, [u], [seq], item_idx)
         attention_score = attention_score[0]
 
@@ -85,11 +91,21 @@ def evaluate(model, dataset, args, sess):
         if rank < 10:
             NDCG += 1 / np.log2(rank + 2)
             HT += 1
+            success_user_attention_heat_map[u] = attention_score
+            # success_users.append(u)
+            # success_users_attention_score = np.append(success_users_attention_score, attention_score)
+        else:
+            error_user_attention_heat_map[u] = attention_score
+            # error_users.append(u)
+            # error_users_attention_score = np.append(error_users_attention_score, attention_score)
+
         if valid_user % 100 == 0:
             print('.', end=' ')
             sys.stdout.flush()
 
-    return NDCG / valid_user, HT / valid_user
+        result = [ NDCG / valid_user, HT / valid_user ]
+
+    return result, success_user_attention_heat_map, error_user_attention_heat_map
 
 
 def evaluate_valid(model, dataset, args, sess):

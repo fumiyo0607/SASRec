@@ -101,7 +101,7 @@ def model_train(args):
                 t1 = time.time() - t0
                 T += t1
                 print('Evaluating', end=' ')
-                t_test = evaluate(model, dataset, args, sess)
+                t_test, success_users, success_users_attention_score, error_users, error_users_attention_score = evaluate(model, dataset, args, sess)
                 t_valid = evaluate_valid(model, dataset, args, sess)
                 print('')
                 print('epoch:%d, time: %f(s), valid (NDCG@10: %.4f, HR@10: %.4f), test (NDCG@10: %.4f, HR@10: %.4f)' % (
